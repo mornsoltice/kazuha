@@ -1,19 +1,23 @@
 #include "kazuha.h"
 #include <iostream>
-#include <Eigen/Dense>
 
 int main() {
-    kazuha::QuantumCircuit circuit(2);
-    kazuha::QuantumGate gate(2);
+    int qubits = 3;
+    kazuha::QuantumCircuit circuit(qubits);
 
-    circuit.addGate(gate);
+    // Create a state vector with 2^qubits elements initialized to 1/sqrt(2^qubits)
+    Eigen::VectorXcd state = Eigen::VectorXcd::Constant(1 << qubits, std::complex<double>(1.0 / std::sqrt(1 << qubits), 0.0));
 
-    Eigen::VectorXcd state(4); // 2 qubits -> 4 states
-    state << 1, 0, 0, 0; // Initial state |00>
+    // Add Hadamard gate to all qubits
+    for (int i = 0; i < qubits; ++i) {
+        circuit.addGate(kazuha::QuantumGate::Hadamard(qubits, i));
+    }
 
+    // Execute the circuit
     circuit.execute(state);
 
-    std::cout << "State after applying the quantum gate:\n" << state << std::endl;
+    // Print the resulting state vector
+    std::cout << "State vector after applying Hadamard gates:\n" << state << std::endl;
 
     return 0;
 }

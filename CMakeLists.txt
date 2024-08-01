@@ -3,16 +3,16 @@ project(kazuha VERSION 1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 
+# Include directories
 include_directories(include)
+include_directories(/usr/include/eigen3) # Adjust this path if necessary
 
 # Add Eigen
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+include_directories(${EIGEN3_INCLUDE_DIR})
+
+# Fetch 
 include(FetchContent)
-FetchContent_Declare(
-  eigen
-  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-  GIT_TAG 3.4.0
-)
-FetchContent_MakeAvailable(eigen)
 
 # Add GoogleTest
 FetchContent_Declare(
@@ -22,11 +22,28 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
-add_library(kazuha SHARED src/kazuha.cpp)
+# Find and link OpenMP
+find_package(OpenMP REQUIRED)
+if(OpenMP_CXX_FOUND)
+    message("OpenMP found")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
 
+# Library
+add_library(kazuha SHARED src/kazuha.cpp src/entanglement.cpp)
+
+# Example executable
 add_executable(example examples/example.cpp)
 target_link_libraries(example kazuha)
 
+# entanglement 
+add_executable(entanglement_example examples/example_advanced_entanglement.cpp)
+target_link_libraries(entanglement_example kazuha)
+
+# Test executable
 add_executable(test_kazuha tests/test_kazuha.cpp)
 target_link_libraries(test_kazuha kazuha gtest gtest_main)
 gtest_discover_tests(test_kazuha)
+
+# Link the library and OpenMP to the executable
+target_link_libraries(entanglement_example kazuha ${OpenMP_CXX_LIBRARIES})
