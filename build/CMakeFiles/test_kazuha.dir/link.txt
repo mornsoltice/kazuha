@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/test_kazuha.dir/tests/test_kazuha.cpp.o -o test_kazuha  -Wl,-rpath,/home/soltice/Development/kazuha/build libkazuha.so lib/libgtest.a lib/libgtest_main.a lib/libgtest.a
