@@ -1,0 +1,16 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/soltice/Development/kazuha/build/_deps/eigen-src/unsupported/test/BVH.cpp"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"BuildUnsupported"
+		],
+		"name" : "BVH_3"
+	}
+}

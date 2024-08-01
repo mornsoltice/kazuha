@@ -1,4 +1,4 @@
-# charlotte
+# kazuha 
 
 yet a simple quantum c++ library
 
