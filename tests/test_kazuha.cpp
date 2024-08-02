@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
-#include <eigen3/Eigen/Dense>
-#include "kazuha.h"
-#include "entanglement.h"
-#include "superposition.h"
+#include "../include/kazuha.h"
+#include "../include/entanglement.h"
+#include "../include/superposition.h"
+#include "../include/entropy.h"
 
 TEST(KazuhaTest, QuantumGateTest) {
     kazuha::QuantumGate gate(2);
@@ -184,6 +184,26 @@ TEST(SuperpositionTest, CalculateFidelity) {
 
     double fidelity = superposition.calculateFidelity(other_state);
     ASSERT_NEAR(fidelity, 1.0, 1e-10);  // Fidelity with same state should be 1.0
+}
+
+TEST(EntropyTest, ShannonEntropy) {
+    Eigen::VectorXcd state_vector(2);
+    state_vector << std::complex<double>(1.0 / std::sqrt(2), 0.0),
+                    std::complex<double>(1.0 / std::sqrt(2), 0.0);
+
+    double entropy = kazuha::Entropy::computeShannonEntropy(state_vector);
+    ASSERT_NEAR(entropy, 1.0, 1e-10);
+}
+
+TEST(EntropyTest, VonNeumannEntropy) {
+    Eigen::VectorXcd state_vector(2);
+    state_vector << std::complex<double>(1.0 / std::sqrt(2), 0.0),
+                    std::complex<double>(1.0 / std::sqrt(2), 0.0);
+
+    Eigen::MatrixXcd density_matrix = state_vector * state_vector.adjoint();
+
+    double entropy = kazuha::Entropy::computeVonNeumannEntropy(density_matrix);
+    ASSERT_NEAR(entropy, 0.0, 1e-10);  // Pure state should have 0 von Neumann entropy
 }
 
 int main(int argc, char **argv) {

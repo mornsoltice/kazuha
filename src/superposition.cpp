@@ -1,4 +1,4 @@
-#include "superposition.h"
+#include "../include/superposition.h"
 #include <cmath>
 #include <stdexcept>
 

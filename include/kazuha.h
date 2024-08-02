@@ -3,6 +3,8 @@
 
 #include <eigen3/Eigen/Dense>
 #include <vector>
+#include <eigen3/Eigen/Eigenvalues>
+#include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/SVD>
 #include <algorithm>
 #include <cassert>

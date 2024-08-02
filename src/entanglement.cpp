@@ -1,7 +1,7 @@
-#include "entanglement.h"
 #include <iostream>
 #include <eigen3/Eigen/Dense>
 #include <cmath>
+#include "../include/entanglement.h"
 
 namespace kazuha {
 

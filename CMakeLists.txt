@@ -33,7 +33,8 @@ endif()
 add_library(kazuha SHARED
     src/kazuha.cpp
     src/entanglement.cpp
-    src/superposition.cpp  # Add Superposition source file here
+    src/superposition.cpp  
+    src/entropy.cpp
 )
 
 # Example executable
@@ -47,6 +48,10 @@ target_link_libraries(entanglement_example kazuha ${OpenMP_CXX_LIBRARIES})
 # Superposition example executable
 add_executable(superposition_example examples/example_superposition.cpp)
 target_link_libraries(superposition_example kazuha)
+
+# Entropy Executable
+add_executable(entropy_example examples/example_entropy.cpp)
+target_link_libraries(entropy_example kazuha)
 
 # Test Executable
 add_executable(test_kazuha tests/test_kazuha.cpp)

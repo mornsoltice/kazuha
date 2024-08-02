@@ -3,6 +3,7 @@
 
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/src/Core/Matrix.h>
+#include "kazuha.h"
 
 namespace kazuha {
   class Entanglement {

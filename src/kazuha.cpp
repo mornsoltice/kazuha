@@ -1,4 +1,4 @@
-#include "kazuha.h"
+#include "../include/kazuha.h"
 #include <cmath>
 #include <iostream>
 
