@@ -1,5 +1,5 @@
 # kazuha 
 
-yet a simple quantum c++ library
+kazuha is a simple quantum computing c++, for now only support quantum logic gates, quantum entanglement and superposition
 
 ## still on development

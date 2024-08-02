@@ -11,7 +11,7 @@ include_directories(/usr/include/eigen3) # Adjust this path if necessary
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
-# Fetch 
+# Fetch
 include(FetchContent)
 
 # Add GoogleTest
@@ -30,20 +30,27 @@ if(OpenMP_CXX_FOUND)
 endif()
 
 # Library
-add_library(kazuha SHARED src/kazuha.cpp src/entanglement.cpp)
+add_library(kazuha SHARED
+    src/kazuha.cpp
+    src/entanglement.cpp
+    src/superposition.cpp  # Add Superposition source file here
+)
 
 # Example executable
 add_executable(example examples/example.cpp)
 target_link_libraries(example kazuha)
 
-# entanglement 
+# Entanglement example executable
 add_executable(entanglement_example examples/example_advanced_entanglement.cpp)
-target_link_libraries(entanglement_example kazuha)
+target_link_libraries(entanglement_example kazuha ${OpenMP_CXX_LIBRARIES})
 
-# Test executable
+# Superposition example executable
+add_executable(superposition_example examples/example_superposition.cpp)
+target_link_libraries(superposition_example kazuha)
+
+# Test Executable
 add_executable(test_kazuha tests/test_kazuha.cpp)
 target_link_libraries(test_kazuha kazuha gtest gtest_main)
 gtest_discover_tests(test_kazuha)
 
-# Link the library and OpenMP to the executable
-target_link_libraries(entanglement_example kazuha ${OpenMP_CXX_LIBRARIES})
+

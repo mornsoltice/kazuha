@@ -2,6 +2,7 @@
 #include <eigen3/Eigen/Dense>
 #include "kazuha.h"
 #include "entanglement.h"
+#include "superposition.h"
 
 TEST(KazuhaTest, QuantumGateTest) {
     kazuha::QuantumGate gate(2);
@@ -81,6 +82,107 @@ TEST(EntanglementTest, MeasureEntanglement) {
     Eigen::VectorXcd bell_state = kazuha::Entanglement::createBellState();
     double measurement = kazuha::Entanglement::measureEntanglement(bell_state);
     ASSERT_GE(measurement, 0.0);  // Placeholder check; actual implementation needed
+}
+
+TEST(SuperpositionTest, SetSuperpositionState) {
+    size_t num_qubits = 3;
+    kazuha::Superposition superposition(num_qubits);
+
+    std::vector<std::complex<double>> amplitudes(1 << num_qubits, std::complex<double>(0.0, 0.0));
+    amplitudes[0] = std::complex<double>(1.0 / std::sqrt(2), 0.0);
+    amplitudes[1] = std::complex<double>(1.0 / std::sqrt(2), 0.0);
+    superposition.setSuperposition(amplitudes);
+
+    Eigen::VectorXcd state = superposition.getStateVector();
+    Eigen::VectorXcd expected_state(1 << num_qubits);
+    expected_state.setZero();
+    expected_state[0] = std::complex<double>(1.0 / std::sqrt(2), 0.0);
+    expected_state[1] = std::complex<double>(1.0 / std::sqrt(2), 0.0);
+
+    ASSERT_TRUE(state.isApprox(expected_state));
+}
+
+TEST(SuperpositionTest, ApplyUnitary) {
+    size_t num_qubits = 2;
+    kazuha::Superposition superposition(num_qubits);
+
+    std::vector<std::complex<double>> amplitudes(1 << num_qubits, std::complex<double>(0.0, 0.0));
+    amplitudes[0] = std::complex<double>(1.0, 0.0);
+    superposition.setSuperposition(amplitudes);
+
+    Eigen::MatrixXcd hadamard(4, 4);
+    hadamard << 1.0 / std::sqrt(2), 1.0 / std::sqrt(2), 0.0, 0.0,
+                1.0 / std::sqrt(2), -1.0 / std::sqrt(2), 0.0, 0.0,
+                0.0, 0.0, 1.0 / std::sqrt(2), 1.0 / std::sqrt(2),
+                0.0, 0.0, 1.0 / std::sqrt(2), -1.0 / std::sqrt(2);
+
+    superposition.applyUnitary(hadamard);
+    Eigen::VectorXcd state = superposition.getStateVector();
+
+    Eigen::VectorXcd expected_state(4);
+    expected_state << 1.0 / std::sqrt(2), 0.0, 0.0, 1.0 / std::sqrt(2);
+
+    ASSERT_TRUE(state.isApprox(expected_state));
+}
+
+TEST(SuperpositionTest, MeasureProbability) {
+    size_t num_qubits = 3;
+    kazuha::Superposition superposition(num_qubits);
+
+    std::vector<std::complex<double>> amplitudes(1 << num_qubits, std::complex<double>(0.0, 0.0));
+    amplitudes[0] = std::complex<double>(1.0, 0.0);
+    superposition.setSuperposition(amplitudes);
+
+    double probability = superposition.measureProbability(0);
+    ASSERT_NEAR(probability, 1.0, 1e-10);  // Probability of |000> should be 1.0
+}
+
+TEST(SuperpositionTest, ComputeExpectationValue) {
+    size_t num_qubits = 2;
+    kazuha::Superposition superposition(num_qubits);
+
+    std::vector<std::complex<double>> amplitudes(1 << num_qubits, std::complex<double>(0.0, 0.0));
+    amplitudes[0] = std::complex<double>(1.0, 0.0);
+    superposition.setSuperposition(amplitudes);
+
+    Eigen::MatrixXcd observable(4, 4);
+    observable.setZero();
+    observable(0, 0) = 1.0;
+
+    double expectation_value = superposition.computeExpectationValue(observable);
+    ASSERT_NEAR(expectation_value, 1.0, 1e-10);  // Expectation value for observable |00><00| should be 1.0
+}
+
+TEST(SuperpositionTest, MeasureInBasis) {
+    size_t num_qubits = 3;
+    kazuha::Superposition superposition(num_qubits);
+
+    std::vector<std::complex<double>> amplitudes(1 << num_qubits, std::complex<double>(0.0, 0.0));
+    amplitudes[5] = std::complex<double>(1.0, 0.0);  // Basis state |101>
+    superposition.setSuperposition(amplitudes);
+
+    Eigen::MatrixXcd measurement_basis(8, 8);
+    measurement_basis.setZero();
+    measurement_basis(5, 5) = 1.0;  // Measurement basis |101>
+
+    size_t measured_index = superposition.measureInBasis(measurement_basis);
+    ASSERT_EQ(measured_index, 5);  // Should measure state |101>
+}
+
+TEST(SuperpositionTest, CalculateFidelity) {
+    size_t num_qubits = 3;
+    kazuha::Superposition superposition(num_qubits);
+
+    std::vector<std::complex<double>> amplitudes(1 << num_qubits, std::complex<double>(0.0, 0.0));
+    amplitudes[3] = std::complex<double>(1.0, 0.0);  // Basis state |011>
+    superposition.setSuperposition(amplitudes);
+
+    Eigen::VectorXcd other_state(8);
+    other_state.setZero();
+    other_state[3] = std::complex<double>(1.0, 0.0);  // Same state
+
+    double fidelity = superposition.calculateFidelity(other_state);
+    ASSERT_NEAR(fidelity, 1.0, 1e-10);  // Fidelity with same state should be 1.0
 }
 
 int main(int argc, char **argv) {
