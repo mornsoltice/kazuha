@@ -15,7 +15,8 @@ RUN apt-get update && \
     g++ \
     git \
     libeigen3-dev \
-    unzip
+    unzip && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /app
@@ -24,12 +25,9 @@ WORKDIR /app
 COPY . .
 
 # Create a build directory and navigate into it
-RUN mkdir build && cd build && \
+RUN mkdir -p build && cd build && \
     cmake .. && \
     make
-
-# Entry point 
-ENTRYPOINT ["./build/test_kazuha"]
 
 # Specify the command to run on container start
 CMD ["./build/example"]  
