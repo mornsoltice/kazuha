@@ -1,5 +1,5 @@
-# Use the official Ubuntu base image
-FROM ubuntu:22.04
+# Use a newer Ubuntu base image
+FROM ubuntu:20.04
 
 # Set Env Variable
 ENV DEBIAN_FRONTEND=noninteractive
@@ -7,16 +7,22 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Set the maintainer label
 LABEL maintainer="khairandramnandyka@gmail.com"
 
-# Install required packages
+# Install required packages and upgrade CMake
 RUN apt-get update && \
     apt-get install -y \
     build-essential \
-    cmake \
     g++ \
     git \
     libeigen3-dev \
-    unzip && \
-    rm -rf /var/lib/apt/lists/*
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install a newer version of CMake
+RUN wget https://cmake.org/files/v3.30/cmake-3.30.0-Linux-x86_64.sh && \
+    chmod +x cmake-3.30.0-Linux-x86_64.sh && \
+    ./cmake-3.30.0-Linux-x86_64.sh --skip-license --prefix=/usr/local && \
+    rm cmake-3.30.0-Linux-x86_64.sh
 
 # Set the working directory
 WORKDIR /app
@@ -30,4 +36,4 @@ RUN mkdir -p build && cd build && \
     make
 
 # Specify the command to run on container start
-CMD ["./build/example"]  
+CMD ["./build/example"]
