@@ -38,3 +38,4 @@ jobs:
         file: ./Dockerfile
         builder: default
         push: true
+        tags: kentoad/kazuha:latest
