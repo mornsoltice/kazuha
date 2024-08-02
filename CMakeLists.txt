@@ -35,6 +35,7 @@ add_library(kazuha SHARED
     src/entanglement.cpp
     src/superposition.cpp  
     src/entropy.cpp
+    src/qft.cpp
 )
 
 # Example executable
@@ -52,6 +53,11 @@ target_link_libraries(superposition_example kazuha)
 # Entropy Executable
 add_executable(entropy_example examples/example_entropy.cpp)
 target_link_libraries(entropy_example kazuha)
+
+# QFT Executable
+add_executable(qft_example examples/example_qft.cpp)
+target_link_libraries(qft_example kazuha)
+
 
 # Test Executable
 add_executable(test_kazuha tests/test_kazuha.cpp)

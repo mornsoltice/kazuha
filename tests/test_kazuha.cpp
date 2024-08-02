@@ -3,6 +3,7 @@
 #include "../include/entanglement.h"
 #include "../include/superposition.h"
 #include "../include/entropy.h"
+#include "../include/qft.h"
 
 TEST(KazuhaTest, QuantumGateTest) {
     kazuha::QuantumGate gate(2);
@@ -204,6 +205,20 @@ TEST(EntropyTest, VonNeumannEntropy) {
 
     double entropy = kazuha::Entropy::computeVonNeumannEntropy(density_matrix);
     ASSERT_NEAR(entropy, 0.0, 1e-10);  // Pure state should have 0 von Neumann entropy
+}
+
+TEST(QFTTest, ApplyQFT) {
+    size_t num_qubits = 2;
+    Eigen::VectorXcd state_vector(1 << num_qubits);
+    state_vector.setZero();
+    state_vector[0] = 1.0;  // Initialize state |00>
+
+    Eigen::VectorXcd qft_state = kazuha::QFT::applyQFT(state_vector);
+
+    Eigen::VectorXcd expected_state(1 << num_qubits);
+    expected_state << 0.5, 0.5, 0.5, 0.5;
+
+    ASSERT_TRUE(qft_state.isApprox(expected_state, 1e-10));
 }
 
 int main(int argc, char **argv) {
