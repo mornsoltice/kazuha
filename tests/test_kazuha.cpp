@@ -110,19 +110,20 @@ TEST(SuperpositionTest, ApplyUnitary) {
     amplitudes[0] = std::complex<double>(1.0, 0.0);
     superposition.setSuperposition(amplitudes);
 
-    Eigen::MatrixXcd hadamard(4, 4);
-    hadamard << 1.0 / std::sqrt(2), 1.0 / std::sqrt(2), 0.0, 0.0,
-                1.0 / std::sqrt(2), -1.0 / std::sqrt(2), 0.0, 0.0,
-                0.0, 0.0, 1.0 / std::sqrt(2), 1.0 / std::sqrt(2),
-                0.0, 0.0, 1.0 / std::sqrt(2), -1.0 / std::sqrt(2);
+    Eigen::MatrixXcd hadamard(2, 2);
+    hadamard << 1.0 / std::sqrt(2), 1.0 / std::sqrt(2),
+                1.0 / std::sqrt(2), -1.0 / std::sqrt(2);
 
-    superposition.applyUnitary(hadamard);
+    Eigen::MatrixXcd hadamard_full = Eigen::MatrixXcd::Identity(4, 4);
+    hadamard_full.block(0, 0, 2, 2) = hadamard;
+
+    superposition.applyUnitary(hadamard_full);
     Eigen::VectorXcd state = superposition.getStateVector();
 
     Eigen::VectorXcd expected_state(4);
-    expected_state << 1.0 / std::sqrt(2), 0.0, 0.0, 1.0 / std::sqrt(2);
+    expected_state << 1.0 / std::sqrt(2), 1.0 / std::sqrt(2), 0.0, 0.0;
 
-    ASSERT_TRUE(state.isApprox(expected_state));
+    ASSERT_TRUE(state.isApprox(expected_state, 1e-10));
 }
 
 TEST(SuperpositionTest, MeasureProbability) {

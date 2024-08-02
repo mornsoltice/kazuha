@@ -3,6 +3,32 @@
 
 #include <eigen3/Eigen/Dense>
 #include <vector>
+#include <eigen3/Eigen/SVD>
+#include <algorithm>
+#include <cassert>
+#include <chrono>
+#include <cmath>
+#include <complex>
+#include <cstdlib>
+#include <cstring>
+#include <exception>
+#include <fstream>
+#include <functional>
+#include <initializer_list>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <limits>
+#include <memory>
+#include <numeric>
+#include <ostream>
+#include <random>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <tuple>
+#include <type_traits>
+#include <utility>
 
 namespace kazuha {
     // Quantum Gate
