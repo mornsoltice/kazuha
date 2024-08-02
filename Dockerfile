@@ -1,35 +1,32 @@
 # Use the official Ubuntu base image
 FROM ubuntu:latest
 
-# Set the working directory
-WORKDIR /app
+# Set the maintainer label
+LABEL maintainer="khairandramnandyka@gmail.com"
 
-# Install dependencies
+# Install required packages
 RUN apt-get update && \
     apt-get install -y \
     build-essential \
     cmake \
+    g++ \
     git \
     libeigen3-dev \
-    libgtest-dev \
-    && rm -rf /var/lib/apt/lists/*
+    unzip
 
-# Copy the entire project to the container
+# Set the working directory
+WORKDIR /app
+
+# Copy the entire project into the container
 COPY . .
 
-# Build Google Test (gtest)
-RUN cd /usr/src/googletest && \
-    cmake . && \
-    make && \
-    cp lib/*.a /usr/lib
-
-# Build the project
+# Create a build directory and navigate into it
 RUN mkdir build && cd build && \
     cmake .. && \
     make
 
-# Run tests
-RUN cd build && ctest --output-on-failure
+# Entry point 
+ENTRYPOINT ["./build/test_kazuha"]
 
-# Set the entry point for the container
-CMD ["bash"]
+# Specify the command to run on container start
+CMD ["./build/example"]  
