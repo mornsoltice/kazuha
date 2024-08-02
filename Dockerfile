@@ -1,5 +1,8 @@
 # Use the official Ubuntu base image
-FROM ubuntu:latest
+FROM ubuntu:18.04
+
+# Set Env Variable
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Set the maintainer label
 LABEL maintainer="khairandramnandyka@gmail.com"
