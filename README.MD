@@ -1,6 +1,6 @@
-![kazuha](kazuha.jpg)
+## still on development but you can try few features
 
-## on development
+![kazuha](kazuha.jpg)
 
 # kazuha 
 
