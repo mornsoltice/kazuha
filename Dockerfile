@@ -7,22 +7,16 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Set the maintainer label
 LABEL maintainer="khairandramnandyka@gmail.com"
 
-# Install required packages and upgrade CMake
+# Install required packages and CMake
 RUN apt-get update && \
     apt-get install -y \
     build-essential \
     g++ \
     git \
     libeigen3-dev \
-    wget \
+    cmake \
     unzip \
     && rm -rf /var/lib/apt/lists/*
-
-# Install a newer version of CMake
-RUN wget https://cmake.org/files/v3.30/cmake-3.30.0-Linux-x86_64.sh && \
-    chmod +x cmake-3.30.0-Linux-x86_64.sh && \
-    ./cmake-3.30.0-Linux-x86_64.sh --skip-license --prefix=/usr/local && \
-    rm cmake-3.30.0-Linux-x86_64.sh
 
 # Set the working directory
 WORKDIR /app
