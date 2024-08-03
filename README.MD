@@ -1,4 +1,7 @@
 ## still on development but you can try few features
+![Docker Build Status](https://github.com/mornsoltice/kazuha/actions/workflows/docker-build.yml/badge.svg)
+![Ubuntu Test Status](https://github.com/mornsoltice/kazuha/actions/workflows/ubuntu-test.yml/badge.svg)
+
 
 ![kazuha](kazuha.jpg)
 
